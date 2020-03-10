@@ -569,6 +569,7 @@ $ git log --graph --pretty=oneline --abbrev-commit
 
 
 
+<<<<<<< HEAD
 ### 分支策略
 
 在实际开发中，我们应该按照几个基本原则进行分支管理：
@@ -593,3 +594,6 @@ Git分支十分强大，在团队开发中应该充分应用。
 
 a worker is working.
 
+=======
+Git is a free software... had done
+>>>>>>> e8b0209... fix bug 102
