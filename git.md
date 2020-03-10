@@ -311,3 +311,51 @@ $ git branch
 
 因为创建、合并和删除分支非常快，所以Git鼓励你使用分支完成某个任务，合并后再删掉分支，这和直接在`master`分支上工作效果是一样的，但过程更安全。
 
+
+
+### switch
+
+我们注意到切换分支使用`git checkout `，而前面讲过的撤销修改则是`git checkout -- `，同一个命令，有两种作用，确实有点令人迷惑。
+
+实际上，切换分支这个动作，用`switch`更科学。因此，最新版本的Git提供了新的`git switch`命令来切换分支：
+
+创建并切换到新的`dev`分支，可以使用：
+
+```
+$ git switch -c dev
+```
+
+直接切换到已有的`master`分支，可以使用：
+
+```
+$ git switch master
+```
+
+使用新的`git switch`命令，比`git checkout`要更容易理解。
+
+
+
+### 小结
+
+Git鼓励大量使用分支：
+
+查看分支：`git branch`
+
+ 创建分支：`git branch <name>   `
+
+切换分支：`git checkout <name>   ` 或者`git switch <name>   ` `
+
+创建+切换分支：`git checkout -b <name>   ` 或者`git switch -c <name>   `
+
+合并某分支到当前分支：`git merge <name>   `
+
+删除分支：`git branch -d <name>   `
+
+
+
+## 解决冲突
+
+```
+Creating a new branch is quick AND simple.
+```
+
