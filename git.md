@@ -53,8 +53,38 @@ git用c语言开发的
 
 ### 版本回退
 
+Git的版本回退速度非常快，因为Git在内部有个指向当前版本的`HEAD`指针，当你回退版本的时候，Git仅仅是把HEAD从指向`append GPL`：
+
+```ascii
+┌────┐
+│HEAD│
+└────┘
+   │
+   └──> ○ append GPL
+        │
+        ○ add distributed
+        │
+        ○ wrote a readme file
+```
+
+改为指向`add distributed`：
+
+```ascii
+┌────┐
+│HEAD│
+└────┘
+   │
+   │    ○ append GPL
+   │    │
+   └──> ○ add distributed
+        │
+        ○ wrote a readme file
+```
+
+然后顺便把工作区的文件更新了。所以你让`HEAD`指向哪个版本号，你就把当前版本定位在哪。
+
 - `HEAD`指向的版本就是当前版本，因此，Git允许我们在版本的历史之间穿梭，使用命令`git reset --hard commit_id`。
-- 穿梭前，用`git log`可以查看提交历史，以便确定要回退到哪个版本。
+- 穿梭前，用`git log`可以查看提交历史，以便确定要回退到哪个版本， 如果嫌输出信息太多，看得眼花缭乱的，可以试试加上`--pretty=oneline`参数。
 - 要重返未来，用`git reflog`查看命令历史，以便确定要回到未来的哪个版本。
 
 
@@ -62,6 +92,14 @@ git用c语言开发的
 ### 工作区和暂存区
 
  ![Image text]( https://www.liaoxuefeng.com/files/attachments/919020037470528/0)
+
+
+
+### 管理修改
+
+ 用`git diff HEAD -- readme.txt`命令可以查看工作区和版本库里面最新版本的区别
+
+
 
 
 
@@ -73,8 +111,118 @@ git用c语言开发的
 
 
 
+### 撤销修改
+
+命令`git checkout -- readme.txt`意思就是，把`readme.txt`文件在工作区的修改全部撤销，这里有两种情况：
+
+一种是`readme.txt`自修改后还没有被放到暂存区，现在，撤销修改就回到和版本库一模一样的状态；
+
+一种是`readme.txt`已经添加到暂存区后，又作了修改，现在，撤销修改就回到添加到暂存区后的状态。
+
+总之，就是让这个文件回到最近一次`git commit`或`git add`时的状态。
+
+
+
+ 用命令`git reset HEAD `可以把暂存区的修改撤销掉（unstage），重新放回工作区 
+
+ `git reset`命令既可以回退版本，也可以把暂存区的修改回退到工作区。当我们用`HEAD`时，表示最新的版本。 
+
+
+
 场景1：当你改乱了工作区某个文件的内容，想直接丢弃工作区的修改时，用命令`git checkout -- file`。
 
 场景2：当你不但改乱了工作区某个文件的内容，还添加到了暂存区时，想丢弃修改，分两步，第一步用命令`git reset HEAD `，就回到了场景1，第二步按场景1操作。
 
 场景3：已经提交了不合适的修改到版本库时，想要撤销本次提交，参考[版本回退](https://www.liaoxuefeng.com/wiki/896043488029600/897013573512192)一节，不过前提是没有推送到远程库。
+
+
+
+### 删除文件
+
+一般情况下，你通常直接在文件管理器中把没用的文件删了，或者用`rm`命令删了：
+
+```
+$ rm test.txt
+```
+
+ 现在你有两个选择，一是确实要从版本库中删除该文件，那就用命令`git rm`删掉，并且`git commit`
+
+另一种情况是删错了，因为版本库里还有呢，所以可以很轻松地把误删的文件恢复到最新版本：
+
+```
+$ git checkout -- test.txt
+```
+
+`git checkout`其实是用版本库里的版本替换工作区的版本，无论工作区是修改还是删除，都可以“一键还原”。
+
+ 注意：从来没有被添加到版本库就被删除的文件，是无法恢复的！
+
+
+
+ 命令`git rm`用于删除一个文件。如果一个文件已经被提交到版本库，那么你永远不用担心误删，但是要小心，你只能恢复文件到最新版本，你会丢失**最近一次提交后你修改的内容**。 
+
+
+
+## 添加远程库
+
+git remote add origin https://github.com/PeiroJack/learngit.git
+git push -u origin master
+
+
+
+要关联一个远程库，使用命令`git remote add origin git@server-name:path/repo-name.git`；
+
+关联后，使用命令`git push -u origin master`第一次推送master分支的所有内容；
+
+此后，每次本地提交后，只要有必要，就可以使用命令`git push origin master`推送最新修改；
+
+分布式版本系统的最大好处之一是在本地工作完全不需要考虑远程库的存在，也就是有没有联网都可以正常工作，而SVN在没有联网的时候是拒绝干活的！当有网络的时候，再把本地提交推送一下就完成了同步，真是太方便了！
+
+
+
+## 从远程库克隆
+
+你也许还注意到，GitHub给出的地址不止一个，还可以用`https://github.com/michaelliao/gitskills.git`这样的地址。实际上，Git支持多种协议，默认的`git://`使用ssh，但也可以使用`https`等其他协议。
+
+使用`https`除了速度慢以外，还有个最大的麻烦是每次推送都必须输入口令，但是在某些只开放http端口的公司内部就无法使用`ssh`协议而只能用`https`。
+
+
+
+要克隆一个仓库，首先必须知道仓库的地址，然后使用`git clone`命令克隆。
+
+Git支持多种协议，包括`https`，但通过`ssh`支持的原生`git`协议速度最快。
+
+
+
+# 分支管理
+
+## 创建与合并分支
+
+在[版本回退](https://www.liaoxuefeng.com/wiki/896043488029600/897013573512192)里，你已经知道，每次提交，Git都把它们串成一条时间线，这条时间线就是一个分支。截止到目前，只有一条时间线，在Git里，这个分支叫主分支，即`master`分支。`HEAD`严格来说不是指向提交，而是指向`master`，`master`才是指向提交的，所以，`HEAD`指向的就是当前分支。
+
+一开始的时候，`master`分支是一条线，Git用`master`指向最新的提交，再用`HEAD`指向`master`，就能确定当前分支，以及当前分支的提交点：
+
+![git-br-initial](https://www.liaoxuefeng.com/files/attachments/919022325462368/0)
+
+每次提交，`master`分支都会向前移动一步，这样，随着你不断提交，`master`分支的线也越来越长。
+
+当我们创建新的分支，例如`dev`时，Git新建了一个指针叫`dev`，指向`master`相同的提交，再把`HEAD`指向`dev`，就表示当前分支在`dev`上：
+
+![git-br-create](https://www.liaoxuefeng.com/files/attachments/919022363210080/l)
+
+你看，Git创建一个分支很快，因为除了增加一个`dev`指针，改改`HEAD`的指向，工作区的文件都没有任何变化！
+
+不过，从现在开始，对工作区的修改和提交就是针对`dev`分支了，比如新提交一次后，`dev`指针往前移动一步，而`master`指针不变：
+
+![git-br-dev-fd](https://www.liaoxuefeng.com/files/attachments/919022387118368/l)
+
+假如我们在`dev`上的工作完成了，就可以把`dev`合并到`master`上。Git怎么合并呢？最简单的方法，就是直接把`master`指向`dev`的当前提交，就完成了合并：
+
+![git-br-ff-merge](https://www.liaoxuefeng.com/files/attachments/919022412005504/0)
+
+所以Git合并分支也很快！就改改指针，工作区内容也不变！
+
+合并完分支后，甚至可以删除`dev`分支。删除`dev`分支就是把`dev`指针给删掉，删掉后，我们就剩下了一条`master`分支：
+
+![git-br-rm](https://www.liaoxuefeng.com/files/attachments/919022479428512/0)
+
