@@ -567,3 +567,6 @@ $ git log --graph --pretty=oneline --abbrev-commit
 
 ![git-no-ff-mode](https://www.liaoxuefeng.com/files/attachments/919023225142304/0)
 
+
+
+Git is a free software...
