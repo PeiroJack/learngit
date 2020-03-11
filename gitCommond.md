@@ -71,5 +71,14 @@ git commit -m "日志信息" 此时commit一定不能带具体文件名
 
 git remove -v 查看当前所有远程地址别名
 git remote add [别名][远程地址]
+git remote add origin https://github.com/PeiroJack/learngit.git
+git push [别名][分支名]
+git push origin master
+git clone [远程地址]
+
+pull=fetch+merge
+git fetch [远程库地址别名][远程分支名]
+git merge [远程库地址别名/远程分支名]
+git pull [远程库地址别名] [远程分支名]
 ```
 
