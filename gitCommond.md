@@ -1,3 +1,29 @@
+# 学习尚硅谷的git教程做的笔记
+
+[学习网址]( https://www.bilibili.com/video/av24441039?p=43 )
+
+学习到P43 在Eclipse中Git插件
+
+预计看完java，开始找项目练手的时候用到
+
+
+
+# github上找开源项目
+
+ [git搜索]( https://help.github.com/en/github/searching-for-information-on-github/searching-for-repositories )
+
+in:name example 名字中有“example”
+in:readme example readme中有“example”
+in:description example 描述中有“example”
+
+stars:>1000 star>1000
+forks:>1000 fork>1000
+pushed:>2019-09-01 2019年9月1日后有更新的
+
+language:java 用Java编写的项目 
+
+
+
 # Linus指令
 
 ``` 
@@ -83,5 +109,23 @@ git checkout master 返回master分支
 
 git merge [远程库地址别名/远程分支名]
 git pull [远程库地址别名] [远程分支名]
+
+SSH登录
+进入当前用户的根目录
+cd ~
+
+删除.ssh 目录
+rm -rvf .ssh
+
+运行命令生成.ssh 密钥目录
+ssh-keygen -t rsa -C [用户邮箱]
+ssh-keygen -t rsa -C 3532926353@qq.com
+
+进入.ssh目录查看文件列表
+cd .ssh
+Is -lF
+
+查看id_rsa.pub文件内容
+cat id_rsa.pub
 ```
 
