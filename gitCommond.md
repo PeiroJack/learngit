@@ -78,6 +78,9 @@ git clone [远程地址]
 
 pull=fetch+merge
 git fetch [远程库地址别名][远程分支名]
+git checkout 'origin/master' 跳转到远程库分支
+git checkout master 返回master分支
+
 git merge [远程库地址别名/远程分支名]
 git pull [远程库地址别名] [远程分支名]
 ```
